@@ -1,0 +1,16 @@
+{
+  "name": "dp-uniapp",
+  "private": true,
+  "scripts": {
+    "build:h5": "UNI_PLATFORM=h5 vite build"
+  },
+  "dependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@dcloudio/uni-app": "^3.0.0-3080420231127001",
+    "@dcloudio/vite-plugin-uni": "^4.0.0",
+    "typescript": "^5.4.0",
+    "vite": "^5.0.0"
+  }
+}
