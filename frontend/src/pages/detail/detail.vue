@@ -13,7 +13,7 @@ export default {
   methods:{
     load(id){
       uni.request({
-        url: `/api/articles/${id}`,
+        url: `/daily_principle/articles/${id}`,
         success: (res)=> this.article = res.data || {}
       })
     }
