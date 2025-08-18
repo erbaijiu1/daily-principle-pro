@@ -1,8 +1,11 @@
 from sqlalchemy import Column, BigInteger, String, Text, DateTime, func
-from db import Base
+from sqlalchemy.orm import declarative_base
+
+
+Base = declarative_base()
 
 class WechatArticle(Base):
-    __tablename__ = "wechat_articles"
+    __tablename__ = "t_wechat_articles"
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     url = Column(String(512), nullable=False, unique=True)
     title = Column(String(256), nullable=False)
