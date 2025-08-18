@@ -1,0 +1,5 @@
+frontend/node_modules/
+server/.idea/
+server/__pycache__/
+server/api/__pycache__/
+server/utils/__pycache__/
