@@ -110,6 +110,37 @@ async def crawl_wechat(req: CrawlReq):
         title, author, published_at, cover, content_html, content_text = parse_wechat_article(r.text)
 
         with SessionLocal() as s:
+            # 1) 先按标题去重
+            exist_by_title = s.execute(
+                select(WechatArticle).where(WechatArticle.title == title)
+            ).scalar_one_or_none()
+            if exist_by_title:
+                logger.info(f"Skip insert, duplicate title: {title} (id={exist_by_title.id})")
+                return {
+                    "id": exist_by_title.id,
+                    "title": exist_by_title.title,
+                    "author": exist_by_title.author,
+                    "tag": exist_by_title.tag,
+                    "skipped": True,
+                    "reason": "duplicate_title"
+                }
+
+            # 2) 再按 URL 去重（以防重复提交同一链接）
+            exist_by_url = s.execute(
+                select(WechatArticle).where(WechatArticle.url == str(req.url))
+            ).scalar_one_or_none()
+            if exist_by_url:
+                logger.info(f"Skip insert, duplicate url: {req.url} (id={exist_by_url.id})")
+                return {
+                    "id": exist_by_url.id,
+                    "title": exist_by_url.title,
+                    "author": exist_by_url.author,
+                    "tag": exist_by_url.tag,
+                    "skipped": True,
+                    "reason": "duplicate_url"
+                }
+
+            # 3) 新增
             art = WechatArticle(
                 url=str(req.url), title=title, author=author,
                 published_at=published_at, cover_image=cover,
@@ -117,25 +148,19 @@ async def crawl_wechat(req: CrawlReq):
                 tag=req.tag or DEFAULT_TAG
             )
             s.add(art)
-            try:
-                s.commit()
-                s.refresh(art)
-                logger.info(f"Successfully crawled and saved article: {art.title} with ID: {art.id}")
-            except IntegrityError:
-                s.rollback()
-                result = s.execute(select(WechatArticle).where(WechatArticle.url == str(req.url))).scalar_one_or_none()
-                if result is None:
-                    logger.error("Database inconsistency detected")
-                    raise HTTPException(status_code=500, detail="Database inconsistency detected")
-                art = result
-                logger.info(f"Article already exists: {art.title} with ID: {art.id}")
-        return {"id": art.id, "title": art.title, "author": art.author, "tag": art.tag}
+            s.commit()
+            s.refresh(art)
+            logger.info(f"Inserted article: {art.title} (id={art.id})")
+
+        return {"id": art.id, "title": art.title, "author": art.author, "tag": art.tag, "skipped": False}
+
     except Exception as e:
         logger.error(f"Error in crawl_wechat: {str(e)}", exc_info=True)
-        # 重新抛出HTTPException以保持原有错误处理逻辑
         if isinstance(e, HTTPException):
             raise e
         raise HTTPException(status_code=500, detail="Internal server error")
+
+
 
 @router.get("/articles")
 async def list_articles(tag: Optional[str] = Query(None), page: int = 1, size: int = 10):
