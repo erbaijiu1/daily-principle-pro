@@ -13,7 +13,7 @@ def process_text(need_deal_txt:  str, model_name: str = "qwen3-235b-a22b-thinkin
         return
 
     prompt_txt = """
-    这是我的语音转文字内容。请帮我整理格式，但内容不要做任何修改。
+    这是我的语音转文字内容。请帮我整理格式，意思不要做修改。
 
     要求：
     1. 保持原文内容，只调整格式和段落，通过上下文理解，有错误的词语需要纠正。
@@ -21,6 +21,7 @@ def process_text(need_deal_txt:  str, model_name: str = "qwen3-235b-a22b-thinkin
     3. [根据需要添加：帮我加上合适的标点符号]
     4. [根据需要添加：如果是繁体中文，帮我转换成简体中文]
     5. 保持原文的口语风格和表达特点，尽量不调整语义，错别字或者词语可以调整。
+    6. 由于是语音转文字，所以，一些词需要整体通过语境判断是不是对的，错误的纠正过来。
 
     内容如下：
     %need_deal_txt%
@@ -38,39 +39,18 @@ def process_text(need_deal_txt:  str, model_name: str = "qwen3-235b-a22b-thinkin
 if __name__ == "__main__":
     url_and_file_name_list = [
         {
-            "url": "https://encrypt-k-vod.xet.tech/9764a7a5vodtransgzp1252524126/5a1ababb5145403701727771063/drm/v.f421220.m3u8?sign=fbc0eb52b2cec9bc6fe78966b091fcb1&t=690b5d2a&us=GgLJIZaiNQ",
-            "file_name": "黄金的新高，黄毛的烦恼-1",
+            "url": "https://encrypt-k-vod.xet.tech/9764a7a5vodtransgzp1252524126/117df24a5145403705784969404/drm/v.f421220.m3u8?sign=63c5da9ec2da5c533d96e3a71a7077c5&t=691b21b5&us=eJffkoWzFr",
+            "file_name": "铸大钱的故事 （一）2025-11-15",
         },
         {
-            "url": "https://encrypt-k-vod.xet.tech/9764a7a5vodtransgzp1252524126/a9469ce15145403701728852815/drm/v.f421220.m3u8?sign=816375ef491ad7ed3338fa1345815e62&t=690b5d6c&us=VEdwWKGCrg",
-            "file_name": "黄金的新高，黄毛的烦恼-2",
+            "url": "https://v-vod-k.xiaoeknow.com/a8307e36f7a64aeeae086cc157bb356b/appfvn6my9u7697/video/b_u_d07g5c5st3c629qdmda0/mi16oaf905up/drm/main.m3u8?sign=a7815fcf8f6a84a0443a7729dee35ffa&t=691b2218&us=DZkUNAggum",
+            "file_name": "铸大钱的故事 （二）2025-11-15",
         },
         {
-            "url": "https://v-vod-k.xiaoeknow.com/a8307e36f7a64aeeae086cc157bb356b/appfvn6my9u7697/video/b_u_d07g5c5st3c629qdmda0/mgn5m1nu0io8/drm/main.m3u8?sign=4e545e1221329b721a8ba0b0b23ec90c&t=690b5d88&us=qEgPAwRWaN",
-            "file_name": "黄金的新高，黄毛的烦恼-3",
-        },
-        {
-            "url": "https://v-vod-k.xiaoeknow.com/a8307e36f7a64aeeae086cc157bb356b/appfvn6my9u7697/video/b_u_d07g5c5st3c629qdmda0/mgn5oj240ut0/drm/main.m3u8?sign=4fa7de1b81e5c259cb52bbecc9b994d6&t=690b5db5&us=gsAQgLmlUG",
-            "file_name": "黄金的新高，黄毛的烦恼-4",
-        },
-        {
-            "url": "https://v-vod-k.xiaoeknow.com/a8307e36f7a64aeeae086cc157bb356b/appfvn6my9u7697/video/b_u_d07g5c5st3c629qdmda0/mgd64sds07aq/drm/main.m3u8?sign=c5266d5356e480a8b8c6415e86d6d685&t=690b5dd0&us=SetFuMJrjR",
-            "file_name": "消费的逻辑-1",
-        },
-        {
-            "url": "https://material-ali.vod.xiaoe-materials.com/70df0a4fa19f71f0814a6733a78e0102/05271c23725c592f52a3eace5de62793-sd-encrypt-stream.m3u8?sign=422c27874ffd7f56cf3b717c1e1f23e3&t=690b5deb&us=LXyloMXEzG",
-            "file_name": "消费的逻辑-2",
-        },
-        {
-            "url": "https://v-vod-k.xiaoeknow.com/a8307e36f7a64aeeae086cc157bb356b/appfvn6my9u7697/video/b_u_d07g5c5st3c629qdmda0/mgd69tt8081e/drm/main.m3u8?sign=4a80367f95040615ef9786677609f1ef&t=690b5e0a&us=qUmbjylejA",
-            "file_name": "消费的逻辑-3",
-        },
-        {
-            "url": "https://encrypt-k-vod.xet.tech/9764a7a5vodtransgzp1252524126/39b054305145403701000876701/drm/v.f421220.m3u8?sign=c63def71643c20078fcb8be61450e314&t=690b5e24&us=qXHNyuEhRQ",
-            "file_name": "消费的逻辑-4",
+            "url": "https://v-vod-k.xiaoeknow.com/a8307e36f7a64aeeae086cc157bb356b/appfvn6my9u7697/video/b_u_d07g5c5st3c629qdmda0/mi16ru7t0hn9/drm/main.m3u8?sign=db9961b8dc453f6dc9a22410d799efb6&t=691b223a&us=RaEQBRaNlj",
+            "file_name": "铸大钱的故事 （三）2025-11-15",
         },
     ]
-
     for item in url_and_file_name_list:
         try:
             download_video(item["url"], item["file_name"])
