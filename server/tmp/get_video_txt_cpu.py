@@ -2,14 +2,15 @@ import subprocess
 
 from faster_whisper import WhisperModel
 
-def mp4_to_txt(file_name_pre):
+def mp4_to_txt(file_name_pre, dir_name = ""):
     # 3. 执行 ffmpeg 转换命令
     print("开始转换视频为音频...")
+    src_file = f"{dir_name}{file_name_pre}.mp4" if dir_name else file_name_pre
     subprocess.run(
         [
             "ffmpeg",
             "-y",  # 覆盖现有文件
-            "-i", f"{file_name_pre}.mp4",
+            "-i", f"{src_file}",
             "-ar", "16000",  # 16kHz 采样率
             "-ac", "1",      # 单声道
             "-vn",           # 禁用视频流
