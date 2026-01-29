@@ -39,10 +39,10 @@ def process_text(need_deal_txt:  str, model_name: str = "qwen3-235b-a22b-thinkin
 if __name__ == "__main__":
     files_dir = "/Users/hc/Downloads/"
     file_name_list = [
-        "0",
-        "1",
-        "2",
-        "3",
+        # "main",
+        # "main1",
+        # "main2",
+        "main3",
     ]
     for file_name in file_name_list:
         try:
