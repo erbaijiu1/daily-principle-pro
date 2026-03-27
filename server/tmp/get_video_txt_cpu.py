@@ -88,4 +88,4 @@ def get_txt_from_mp3_with_convert(file_name_pre, dir_name=""):
 
 if __name__ == "__main__":
     files_dir = "/Users/hc/Downloads/"
-    get_txt_from_mp3("c585ad85c6909ec99cf2038b3b8f1d67", files_dir)
+    get_txt_from_mp3("lAXPM1wGX07Ko__OA-qzN85DIBdf", files_dir)
