@@ -69,17 +69,40 @@ def call_llm(text):
 
 
 def process_online_list(tasks):
-    """主逻辑：循环处理任务列表"""
+    """
+    重构后的主逻辑：
+    1. 第一阶段：全量下载（抢在链接失效前完成）
+    2. 第二阶段：全量处理（识别 + 大模型加工）
+    """
+
+    # --- 第一阶段：全部下载 ---
+    print(f"🚀 开始第一阶段：批量下载 (共 {len(tasks)} 个任务)...")
     for task in tasks:
         try:
-            # 1. 下载
             local_file = download_file(task['url'], task['alias'])
+            # 将本地路径存入 task 字典中，方便下一阶段使用
+            task['local_path'] = local_file
+        except Exception as e:
+            print(f"❌ 下载 {task['alias']} 失败: {str(e)}")
+            task['local_path'] = None  # 标记为下载失败
 
+    print("\n" + "=" * 30 + "\n")
+
+    # --- 第二阶段：识别与处理 ---
+    print("🚀 开始第二阶段：识别与大模型处理...")
+    for task in tasks:
+        # 跳过第一阶段下载失败的任务
+        if not task.get('local_path'):
+            print(f"⏩ 跳过任务 {task['alias']} (无本地文件)")
+            continue
+
+        local_file = task['local_path']
+        try:
             # 2. 转文字
             raw_text = transcribe_audio(local_file)
 
-            # 3. 大模型处理
-            final_content =  process_text_with_prompt( raw_text)
+            # 3. 大模型处理 (调用你自定义的 process_text_with_prompt)
+            final_content = process_text_with_prompt(raw_text)
 
             # 4. 写入本地
             output_file = f"{task['alias']}_final.txt"
@@ -88,11 +111,12 @@ def process_online_list(tasks):
 
             print(f"✨ 任务成功完成: {output_file}")
 
-            # 可选：处理完后删除临时 MP3 文件
-            os.remove(local_file)
+            # 5. 清理临时 MP3 文件
+            if os.path.exists(local_file):
+                os.remove(local_file)
 
         except Exception as e:
-            print(f"❌ 任务 {task['alias']} 失败: {str(e)}")
+            print(f"❌ 任务 {task['alias']} 处理过程中出错: {str(e)}")
 
 
 if __name__ == "__main__":
@@ -100,7 +124,7 @@ if __name__ == "__main__":
         "https://wechatapppro-1252524126.file.myqcloud.com/appfvn6my9u7697/audio_compressed/1775926001_hbawo3mnukcqoj.mp3",
         "https://wechatapppro-1252524126.file.myqcloud.com/appfvn6my9u7697/audio_compressed/1775926070_xnmnlrmnukhr3n.mp3",
         "https://wechatapppro-1252524126.file.myqcloud.com/appfvn6my9u7697/audio_compressed/1775926143_0e396amnukja5b.mp3",
-        "https://wechatapppro-1252524126.file.myqcloud.com/appfvn6my9u7697/audio_compressed/1775926221_l4kfx1mnukkxqe.mp3"
+        "https://wechatapppro-1252524126.file.myqcloud.com/appfvn6my9u7697/audio_compressed/1775926221_l4kfx1mnukkxqe.mp3",
     ]
     name_pre = "石油危机对经济投资的影响"
     my_tasks = []
