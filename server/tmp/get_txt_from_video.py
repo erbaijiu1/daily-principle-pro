@@ -39,16 +39,17 @@ def process_text(need_deal_txt:  str, model_name: str = "qwen3-235b-a22b-thinkin
 if __name__ == "__main__":
     files_dir = "/Users/hc/Downloads/"
     file_name_list = [
-        "main1",
-        "main2",
-        "main3",
+        # "main1",
+        # "main2",
+        # "main3",
         "main4",
-        "main5",
-        "main6",
+        # "main5",
+        # "main6",
     ]
     for file_name in file_name_list:
         try:
             source_text = mp4_to_txt(file_name, files_dir)
+            # result = process_text(source_text, "qwen3-max-2026-01-23")
             result = process_text(source_text)
             # result to file
             with open(f"{file_name}_final.txt", "w", encoding="utf-8") as f:
